@@ -1,13 +1,11 @@
-import Link from "next/link"
+"use client"
+// import Link from "next/link"
 import { useEffect, useState } from "react"
 import io from 'socket.io-client';
-import AudioPlay from '../components/AudioPlay'
 
 
-export default function CenterPrincipal(){
-    // const [dados, setDados] = useState(undefined);
-    // const [recordDefault, setRecordDefault] = useState(0);
-    // const [recordPriority, setRecordPriority] = useState(0);
+
+export default function CenterPainel(){
     const [ficha, setFicha] = useState([]);
     const [histFicha, setHistFicha] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -23,19 +21,44 @@ export default function CenterPrincipal(){
         }
     }, []);
     
-    // var conta = 0;
     useEffect(()=>{
+        var audioElement = document.getElementById('myAudio');
+
+        // Função para reproduzir áudio
+        function playAudio() {
+            // Verificar se a reprodução automática é possível
+            if (audioElement.paused) {
+                audioElement.play();
+            }
+        }
+
+        // Exemplo: evento de clique para iniciar a reprodução
+        document.addEventListener('click', function() {
+            playAudio();
+        });
+
+        // Simulação de recebimento de atualização do socket
+        function simulacaoAtualizacaoSocket() {
+            // Aqui você pode simular uma atualização do socket
+            // e iniciar a reprodução de áudio em resposta
+            playAudio();
+        }
+
+
         if(socket){
             socket.on('connect', ()=>{
                 console.log('conectado ao servidor:', socket.id);
             });
             socket.on('msgToClient', (message) => {
-                console.log('-----------------------------------')
-                console.log(message)
+                const audio = new Audio('/level-up-191997.mp3');
+                audio.play();
+                // console.log('-----------------------------------')
+                // console.log(message)
                 setFicha(message);
                 histFicha.unshift(message);
                 // setHistFicha((prevMessages) => [...prevMessages, message]);
                 setHistFicha(histFicha);
+                simulacaoAtualizacaoSocket();
             });
             socket.on('disconnect', () => {
                 console.log('Socket desconectado');
@@ -67,12 +90,13 @@ export default function CenterPrincipal(){
             // backgroundColor: '#f2f2f2',
             // border: '1px solid #f2f2f2',
             // padding: '40px',
-            padding: 'clamp(0.1em, 0.1em + 3vw, 3em)',
-            paddingTop: '60px',
+            // padding: 'clamp(0.1em, 0.1em + 3vw, 3em)',
+            // paddingTop: '60px',
             // height: 'calc(100vh - 200px)',
             height: '100%',
             display: 'flex',
             justifyContent: 'space-evenly',
+            alignItems: 'center'
         },
         divs: {
             width: '40%',
@@ -99,13 +123,20 @@ export default function CenterPrincipal(){
         }
     }
     return(
-        <div style={styles.divC}>
-            <div id="esquerda" style={{...styles.divs, justifyContent: 'center', textAlign: 'center'}}>
-                {ficha?
+        <div style={styles.divC} id="principalCenter">
+            <div id="esquerda" style={{...styles.divs, justifyContent: 'space-between', textAlign: 'center'}}>
+                {/* {ficha?
                     <AudioPlay />
-                :console.log(1)}
-                {console.log(ficha)}
-                {console.log(histFicha)}
+                :console.log(1)} */}
+                <div>
+                    {/* <audio ref={audioRef} src="/level-up-191997.mp3" autoPlay={false} /> */}
+                    <audio id="myAudio">
+                        <source src="/level-up-191997.mp3" type="audio/mpeg" />
+                            Seu navegador não suporta áudio HTML5.
+                    </audio>
+                </div>
+                {/* {console.log(ficha)}
+                {console.log(histFicha)} */}
                 <div style={{fontSize: 'clamp(1em, 1em + 3vw, 3em)'}}>{ficha.type}</div>
                 {/* <div style={{fontSize: 'clamp(1em, 1em + 10vw, 10em)'}}>{dados!=undefined?dados.ficha.defaultRecord:'1'}</div> */}
                 <div style={{fontSize: 'clamp(1em, 1em + 7vw, 7em)'}}>
@@ -158,5 +189,3 @@ export default function CenterPrincipal(){
         </div>
     )
 }
-
-//PESQUISAR NO CHATGPT = como fazer o front-end nextjs observar mudanças no banco prisma do backend nestjs

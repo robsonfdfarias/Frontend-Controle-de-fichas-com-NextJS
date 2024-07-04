@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import Top from "./components/Top"
 import Footer from "./components/Footer"
 import DivCenter from "./components/DivCenter"
-import CenterPrincipal from "./pages/CenterPrincipal"
+import CenterPrincipal from "./CenterPrincipal"
 import React, { useEffect } from "react";
 
 export default function Home() {

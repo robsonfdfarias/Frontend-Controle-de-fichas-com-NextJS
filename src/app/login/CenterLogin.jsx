@@ -51,8 +51,9 @@ export default function CenterLogin(){
                 const data = await response.json()
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('localId', data.localId);
+                localStorage.setItem('matricula', data.matricula);
                 localStorage.setItem('mesa', '01')
-                window.location.href="/"
+                window.location.href="/";
                 setData(data);
             }catch(error){
                 console.log(error);
