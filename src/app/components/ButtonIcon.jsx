@@ -3,7 +3,11 @@ import { ConfigUrlImg } from "./ConfigUrlImg";
 
 export default function ButtonIcon(props){
     const [isHovered, setIsHovered] = useState(false);
-    const url = ConfigUrlImg(props.img); // props.img = 'pasta/img.formato'
+    const [url, setUrl] = useState('');
+    // const url = ConfigUrlImg(props.img); // props.img = 'pasta/img.formato'
+    useEffect(()=>{
+        setUrl(ConfigUrlImg(props.img));
+    }, [])
     const estiloBase = {
         padding: props.padding?props.padding:'10px 10px',
         color: 'white',
@@ -36,7 +40,7 @@ export default function ButtonIcon(props){
                     >
             {/* <img src={"../../"+props.img} width="20" title="Editar notícia" /> */}
             {/* <img src={url} width="20" title="Editar notícia" /> */}
-            {props.img!=undefined?<img src={url} height={'100%'} width={'100%'} title="Editar notícia" />:props.title}
+            {props.img!=undefined?<img src={url} height={'100%'} width={'100%'} title={props.textHover?props.textHover:"Clique"} />:props.title}
         </div>
     )
 }

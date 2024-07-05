@@ -8,18 +8,9 @@ import io from 'socket.io-client';
 export default function CenterPainel(){
     const [ficha, setFicha] = useState([]);
     const [histFicha, setHistFicha] = useState([]);
-    const [socket, setSocket] = useState(null);
-    var o='';
+    // var o=0;
+    var socket = null;
 
-    useEffect(()=>{
-        const newSocket = io('http://localhost:3000', {
-            withCredentials: true, // necessário para permitir cookies, se for o caso
-        });
-        setSocket(newSocket);
-        return () => {
-            newSocket.disconnect();
-        }
-    }, []);
     
     useEffect(()=>{
         var audioElement = document.getElementById('myAudio');
@@ -44,32 +35,58 @@ export default function CenterPainel(){
             playAudio();
         }
 
-
-        if(socket){
-            socket.on('connect', ()=>{
-                console.log('conectado ao servidor:', socket.id);
+        console.log('/////////////////////////////////////')
+        console.log('lllllllllllllllllllllllllllllllllllllllllllllllllllll')
+        if(socket==null){
+            socket = io('http://localhost:3000', {
+                withCredentials: true, // necessário para permitir cookies, se for o caso
+                transportOptions: {
+                    polling: {
+                        extraHeaders: {
+                            localid: localStorage.getItem('localId') // Aqui você define o localId que deseja enviar
+                        }
+                    }
+                }
             });
-            socket.on('msgToClient', (message) => {
-                const audio = new Audio('/level-up-191997.mp3');
-                audio.play();
-                // console.log('-----------------------------------')
-                // console.log(message)
-                setFicha(message);
-                histFicha.unshift(message);
-                // setHistFicha((prevMessages) => [...prevMessages, message]);
-                setHistFicha(histFicha);
-                simulacaoAtualizacaoSocket();
-            });
-            socket.on('disconnect', () => {
-                console.log('Socket desconectado');
-            });
-            return () => {
-                // Limpa os listeners do socket
-                // socket.off('connect');
-                socket.off('disconnect');
-            };
+            if(socket){
+                socket.on('connect', ()=>{
+                    console.log('conectado ao servidor:', socket.id);
+                });
+            }
         }
-    }, [socket]);
+        
+        const keyName = 'msgToClient'+localStorage.getItem('localId');
+        // console.log(keyName)
+            var t = 0;
+        socket.on(keyName, (message) => {
+            if(message.length>0){
+                if(t<1){
+                    const tam = message.length;
+                    // console.log('TAMANHO DO ARRAY: '+tam)
+                    for(let i =0; i<tam; i++){
+                        // console.log(i)
+                        setHistFicha((prevMessages) => [...prevMessages, message[i]]);
+                    }
+                    // console.log('********************************')
+                    // console.log(histFicha)
+                    t++
+                }
+                setFicha(message[0]);
+            }else{
+                setFicha(message);
+                setHistFicha((prevMessages) => [message, ...prevMessages]);
+            }
+            simulacaoAtualizacaoSocket();
+        });
+        // socket.on('disconnect', () => {
+        //     console.log('Socket desconectado');
+        // });
+        return () => {
+            // Limpa os listeners do socket
+            socket.off('connect');
+            socket.off('disconnect');
+        };
+    }, []);
     // const sendMessage = ()=>{
     //     socket.emit('msgToServer', message);
     // }
@@ -125,22 +142,16 @@ export default function CenterPainel(){
     return(
         <div style={styles.divC} id="principalCenter">
             <div id="esquerda" style={{...styles.divs, justifyContent: 'space-between', textAlign: 'center'}}>
-                {/* {ficha?
-                    <AudioPlay />
-                :console.log(1)} */}
                 <div>
-                    {/* <audio ref={audioRef} src="/level-up-191997.mp3" autoPlay={false} /> */}
                     <audio id="myAudio">
                         <source src="/level-up-191997.mp3" type="audio/mpeg" />
                             Seu navegador não suporta áudio HTML5.
                     </audio>
                 </div>
-                {/* {console.log(ficha)}
-                {console.log(histFicha)} */}
+                {/* {console.log(ficha)} */}
+                {/* {console.log(histFicha)} */}
                 <div style={{fontSize: 'clamp(1em, 1em + 3vw, 3em)'}}>{ficha.type}</div>
-                {/* <div style={{fontSize: 'clamp(1em, 1em + 10vw, 10em)'}}>{dados!=undefined?dados.ficha.defaultRecord:'1'}</div> */}
                 <div style={{fontSize: 'clamp(1em, 1em + 7vw, 7em)'}}>
-                    {/* {arrHist[(arrHist.length-1)]} */}
                     {ficha.record}
                 </div>
                 <div style={{display: 'flex', justifyContent: 'space-between', fontSize: 'clamp(1em, 1em + 2vw, 2em)'}}>
@@ -159,23 +170,21 @@ export default function CenterPainel(){
                             </tr>
                         </thead>
                         <tbody>
-                            {/* <tr>
-                                <td style={{borderTop: '1px solid #cdcdcd'}}>5</td>
-                                <td style={{borderTop: '1px solid #cdcdcd'}}>1</td>
-                            </tr> */}
-                            {histFicha.length>0?histFicha.map((obj, index)=>(
-                                <tr key={index}>
-                                    <td style={{ borderTop: '1px solid #cdcdcd'}}>
-                                        { obj.record }
-                                    </td>
-                                    <td style={{ borderTop: '1px solid #cdcdcd'}}>
-                                        { obj.table }
-                                    </td>
-                                    <td style={{ borderTop: '1px solid #cdcdcd'}}>
-                                        { obj.type }
-                                    </td>
-                                </tr>
-                            )):console.log('Não há fichas...')}
+                            {histFicha.length>0?histFicha.map((obj, index)=>{
+                                return (
+                                    <tr key={index}>
+                                        <td style={{ borderTop: '1px solid #cdcdcd'}}>
+                                            { obj.record }
+                                        </td>
+                                        <td style={{ borderTop: '1px solid #cdcdcd'}}>
+                                            { obj.table }
+                                        </td>
+                                        <td style={{ borderTop: '1px solid #cdcdcd'}}>
+                                            { obj.type }
+                                        </td>
+                                    </tr>
+                                )
+                            }):console.log('Não há fichas...')}
                         </tbody>
                     </table>
                 </div>

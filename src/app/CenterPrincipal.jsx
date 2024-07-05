@@ -22,6 +22,13 @@ export default function CenterPrincipal(){
             borderRadius: '9px',
             display: 'flex',
             flexDirection: 'column'
+        },
+        divBt: {
+            width: '15vw'
+        },
+        divBtText: {
+            textAlign: 'center',
+            fontSize: '1.4vw'
         }
     }
     const admin = () => {
@@ -40,50 +47,80 @@ export default function CenterPrincipal(){
     return (
         <div style={styles.divC}>
             <div id="direita" style={styles.divs}>
-                Painel administrativo<br />
-                <ButtonIcon
-                    img={"imgs/painel.svg"}
-                    padding={'0'}
-                    height={200}
-                    width={200}
-                    radius={15}
-                    shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
-                    title={"Painel"}
-                    colorDefault={"#4caf50"}
-                    colorHover={"#458807"}
-                    onClick={painel}
-                />
-                <ButtonIcon
-                    // img={"imgs/edit-lapis.svg"}
-                    title={"Administração"}
-                    colorDefault={"#4caf50"}
-                    colorHover={"#458807"}
-                    onClick={admin}
-                />
-                <ButtonIcon
-                    img={"imgs/tutorial.svg"}
-                    padding={'0'}
-                    height={200}
-                    width={200}
-                    radius={15}
-                    shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
-                    title={"Deslogar"}
-                    colorDefault={"#4caf50"}
-                    colorHover={"#458807"}
-                    onClick={deslogar}
-                />
-                <ButtonIcon
-                    img={"imgs/deslogar.svg"}
-                    padding={'0'}
-                    height={200}
-                    width={200}
-                    radius={15}
-                    shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
-                    title={"Deslogar"}
-                    colorDefault={"#4caf50"}
-                    colorHover={"#458807"}
-                    onClick={deslogar}
-                />
+                <div style={{fontSize: '2vw', marginBottom: '20px'}}>
+                    Painel administrativo
+                </div>
+                
+                <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                    <div style={styles.divBt}>
+                        <ButtonIcon
+                            img={"imgs/painel.svg"}
+                            padding={'0'}
+                            height={styles.divBt.width}
+                            width={styles.divBt.width}
+                            radius={15}
+                            shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
+                            textHover={"Clique para acessar o Painel"}
+                            title={"Painel"}
+                            colorDefault={"#4caf50"}
+                            colorHover={"#458807"}
+                            onClick={painel}
+                        />
+                        <div style={styles.divBtText}>Painel de fichas</div>
+                    </div>
+
+                    <div style={styles.divBt}>
+                        <ButtonIcon
+                            img={"imgs/prox-ficha.svg"}
+                            padding={'0'}
+                            height={styles.divBt.width}
+                            width={styles.divBt.width}
+                            radius={15}
+                            shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
+                            title={"Administração"}
+                            colorDefault={"#4caf50"}
+                            colorHover={"#458807"}
+                            textHover={"Clique para chamar a próxima ficha"}
+                            onClick={admin}
+                        />
+                        <div style={styles.divBtText}>Próxima ficha</div>
+                    </div>
+
+                    <div style={styles.divBt}>
+                        <ButtonIcon
+                            img={"imgs/tutorial.svg"}
+                            padding={'0'}
+                            height={styles.divBt.width}
+                            width={styles.divBt.width}
+                            radius={15}
+                            shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
+                            textHover={"Clique para acessar o tutorial"}
+                            title={"Deslogar"}
+                            colorDefault={"#4caf50"}
+                            colorHover={"#458807"}
+                            onClick={deslogar}
+                        />
+                        <div style={styles.divBtText}>Tutorial de uso</div>
+                    </div>
+
+                    <div style={styles.divBt}>
+                        <ButtonIcon
+                            img={"imgs/deslogar.svg"}
+                            padding={'0'}
+                            height={styles.divBt.width}
+                            width={styles.divBt.width}
+                            radius={15}
+                            shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
+                            textHover={"Clique para deslogar"}
+                            title={"Deslogar"}
+                            colorDefault={"#4caf50"}
+                            colorHover={"#458807"}
+                            onClick={deslogar}
+                        />
+                        <div style={styles.divBtText}>{"Sair ->"}</div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     )
