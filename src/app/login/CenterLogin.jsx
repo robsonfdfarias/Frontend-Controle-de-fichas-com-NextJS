@@ -35,6 +35,7 @@ export default function CenterLogin(){
     // localStorage.removeItem("access_token")
     const handleSubmit = (e) => {
         e.preventDefault();
+        const mesa = document.getElementById('mesa').value;
         async function auth() {
             try{
                 const response =  await fetch("http://localhost:3000/login", {
@@ -49,10 +50,12 @@ export default function CenterLogin(){
                 });
                 console.log(response)
                 const data = await response.json()
+                console.log(data)
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('localId', data.localId);
                 localStorage.setItem('matricula', data.matricula);
-                localStorage.setItem('mesa', '01')
+                // localStorage.setItem('mesa', '01')
+                localStorage.setItem('mesa', mesa)
                 window.location.href="/";
                 setData(data);
             }catch(error){
@@ -67,6 +70,25 @@ export default function CenterLogin(){
         <div style={styles.divC}>
             <div style={styles.divForm}>
                 <h2>Entre com os dados abaixo</h2><br />
+                    <div>
+                        Selecione a mesa: <br />
+                        <select name="mesa" id="mesa">
+                            <option value="01">Mesa 01</option>
+                            <option value="02">Mesa 02</option>
+                            <option value="03">Mesa 03</option>
+                            <option value="04">Mesa 04</option>
+                            <option value="05">Mesa 05</option>
+                            <option value="06">Mesa 06</option>
+                            <option value="07">Mesa 07</option>
+                            <option value="08">Mesa 08</option>
+                            <option value="09">Mesa 09</option>
+                            <option value="10">Mesa 10</option>
+                            <option value="11">Mesa 11</option>
+                            <option value="12">Mesa 12</option>
+                            <option value="13">Mesa 13</option>
+                            <option value="14">Mesa 14</option>
+                        </select>
+                    </div>
                     <input style={styles.inputs} onChange={(e) => setUsername(e.target.value)} placeholder="Matricula (Ex: 555888)" type="text" id="matricula" />
                     <input style={{...styles.inputs, marginBottom: '25px'}} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" type="text" id="senha" /><br />
                     <Button event={handleSubmit} type={"submit"} title={"Entrar"} />

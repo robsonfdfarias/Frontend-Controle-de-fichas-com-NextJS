@@ -44,6 +44,52 @@ export default function CenterPrincipal(){
         localStorage.removeItem("mesa")
         window.location.href = '/login'
     }
+
+    const chama = async () => {
+        await fetch('http://localhost:3000/ficha/defaultPriority', {
+            method: 'POST',
+            headers: {
+                authorization: 'Bearer '+localStorage.getItem('access_token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                localId: parseInt(localStorage.getItem('localId')),
+                mesa: localStorage.getItem('mesa'),
+                userRegistration: localStorage.getItem('matricula'),
+                token: localStorage.getItem('access_token')
+            })
+        })
+        .then((response)=>response.json())
+        .then((json)=>{
+            //
+        })
+        .catch((error)=>{
+            console.log('Erro encontrado: '+error)
+        });
+    }
+
+    const priority = async () => {
+        await fetch('http://localhost:3000/ficha/callPriority', {
+            method: 'POST',
+            headers: {
+                authorization: 'Bearer '+localStorage.getItem('access_token'),
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                localId: parseInt(localStorage.getItem('localId')),
+                mesa: localStorage.getItem('mesa'),
+                userRegistration: localStorage.getItem('matricula'),
+                token: localStorage.getItem('access_token')
+            })
+        })
+        .then((response)=>response.json())
+        .then((json)=>{
+            //
+        })
+        .catch((error)=>{
+            console.log('Erro encontrado: '+error)
+        });
+    }
     return (
         <div style={styles.divC}>
             <div id="direita" style={styles.divs}>
@@ -81,9 +127,26 @@ export default function CenterPrincipal(){
                             colorDefault={"#4caf50"}
                             colorHover={"#458807"}
                             textHover={"Clique para chamar a próxima ficha"}
-                            onClick={admin}
+                            onClick={chama}
                         />
                         <div style={styles.divBtText}>Próxima ficha</div>
+                    </div>
+
+                    <div style={styles.divBt}>
+                        <ButtonIcon
+                            img={"imgs/prox-ficha.svg"}
+                            padding={'0'}
+                            height={styles.divBt.width}
+                            width={styles.divBt.width}
+                            radius={15}
+                            shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
+                            title={"Administração"}
+                            colorDefault={"#4caf50"}
+                            colorHover={"#458807"}
+                            textHover={"Clique para chamar a próxima PRIORIDADE"}
+                            onClick={priority}
+                        />
+                        <div style={styles.divBtText}>Próxima Prioridade</div>
                     </div>
 
                     <div style={styles.divBt}>
@@ -95,7 +158,7 @@ export default function CenterPrincipal(){
                             radius={15}
                             shadow={'2px 2px 2px 2px rgba(0,0,0,0.2)'}
                             textHover={"Clique para acessar o tutorial"}
-                            title={"Deslogar"}
+                            title={"Tutorial"}
                             colorDefault={"#4caf50"}
                             colorHover={"#458807"}
                             onClick={deslogar}
