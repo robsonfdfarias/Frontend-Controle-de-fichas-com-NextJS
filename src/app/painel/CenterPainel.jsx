@@ -5,7 +5,11 @@ import io from 'socket.io-client';
 
 
 
-export default function CenterPainel(){
+export default function CenterPainel(props){
+    var objSession=props.objSession;
+    if(sessionStorage.getItem('objSession')!=undefined){
+        objSession = JSON.parse(sessionStorage.getItem('objSession'));
+    }
     const [ficha, setFicha] = useState([]);
     const [histFicha, setHistFicha] = useState([]);
     // var o=0;
@@ -35,27 +39,28 @@ export default function CenterPainel(){
             playAudio();
         }
 
-        console.log('/////////////////////////////////////')
-        console.log('lllllllllllllllllllllllllllllllllllllllllllllllllllll')
+        // console.log('/////////////////////////////////////')
+        // console.log('lllllllllllllllllllllllllllllllllllllllllllllllllllll')
         if(socket==null){
             socket = io('http://localhost:3000', {
                 withCredentials: true, // necessário para permitir cookies, se for o caso
                 transportOptions: {
                     polling: {
                         extraHeaders: {
-                            localid: localStorage.getItem('localId') // Aqui você define o localId que deseja enviar
+                            localid: objSession.localId // Aqui você define o localId que deseja enviar
                         }
                     }
                 }
             });
             if(socket){
                 socket.on('connect', ()=>{
-                    console.log('conectado ao servidor:', socket.id);
+                    // console.log('conectado ao servidor:', socket.id);
+                    console.log('conectado ao servidor!');
                 });
             }
         }
         
-        const keyName = 'msgToClient'+localStorage.getItem('localId');
+        const keyName = 'msgToClient'+objSession.localId;
         // console.log(keyName)
             var t = 0;
         socket.on(keyName, (message) => {
@@ -184,7 +189,7 @@ export default function CenterPainel(){
                                         </td>
                                     </tr>
                                 )
-                            }):console.log('Não há fichas...')}
+                            }):console.log('')}
                         </tbody>
                     </table>
                 </div>

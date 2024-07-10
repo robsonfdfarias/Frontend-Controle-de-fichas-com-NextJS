@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 
 export default function Home() {
   useEffect(()=>{
-    if(!localStorage.getItem('access_token')){
+    if(sessionStorage.getItem('objSession')==undefined || sessionStorage.getItem('objSession')==null){
       window.location.href = '/login'
     }
   }, [])

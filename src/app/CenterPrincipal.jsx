@@ -1,5 +1,6 @@
 import ButtonIcon from './components/ButtonIcon'
 export default function CenterPrincipal(){
+    const objSession = JSON.parse(sessionStorage.getItem('objSession'));
     const styles = {
         divC: {
             width: '95%',
@@ -35,13 +36,15 @@ export default function CenterPrincipal(){
         window.location.href='/admin'
     }
     const painel = () => {
-        window.location.href='/painel'
+        // window.location.href = '/painel'
+        window.open('/painel', '_blank');
+    }
+    const tutorial = () => {
+        window.open('https://www.youtube.com/c/Inform%C3%A1ticacomRobsonFarias', '_blank');
     }
     const deslogar = (e) => {
         e.preventDefault
-        localStorage.removeItem("access_token")
-        localStorage.removeItem("localId")
-        localStorage.removeItem("mesa")
+        sessionStorage.removeItem("objSession")
         window.location.href = '/login'
     }
 
@@ -49,14 +52,15 @@ export default function CenterPrincipal(){
         await fetch('http://localhost:3000/ficha/defaultPriority', {
             method: 'POST',
             headers: {
-                authorization: 'Bearer '+localStorage.getItem('access_token'),
+                authorization: 'Bearer '+objSession.access_token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                localId: parseInt(localStorage.getItem('localId')),
-                mesa: localStorage.getItem('mesa'),
-                userRegistration: localStorage.getItem('matricula'),
-                token: localStorage.getItem('access_token')
+                // localId: parseInt(localStorage.getItem('localId')),
+                localId: parseInt(objSession.localId),
+                mesa: objSession.mesa,
+                userRegistration: objSession.matricula,
+                token: objSession.access_token
             })
         })
         .then((response)=>response.json())
@@ -72,14 +76,14 @@ export default function CenterPrincipal(){
         await fetch('http://localhost:3000/ficha/callPriority', {
             method: 'POST',
             headers: {
-                authorization: 'Bearer '+localStorage.getItem('access_token'),
+                authorization: 'Bearer '+objSession.access_token,
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                localId: parseInt(localStorage.getItem('localId')),
-                mesa: localStorage.getItem('mesa'),
-                userRegistration: localStorage.getItem('matricula'),
-                token: localStorage.getItem('access_token')
+                localId: parseInt(objSession.localId),
+                mesa: objSession.mesa,
+                userRegistration: objSession.matricula,
+                token: objSession.access_token
             })
         })
         .then((response)=>response.json())
@@ -134,7 +138,7 @@ export default function CenterPrincipal(){
 
                     <div style={styles.divBt}>
                         <ButtonIcon
-                            img={"imgs/prox-ficha.svg"}
+                            img={"imgs/prox-ficha-priority.svg"}
                             padding={'0'}
                             height={styles.divBt.width}
                             width={styles.divBt.width}
@@ -161,7 +165,7 @@ export default function CenterPrincipal(){
                             title={"Tutorial"}
                             colorDefault={"#4caf50"}
                             colorHover={"#458807"}
-                            onClick={deslogar}
+                            onClick={tutorial}
                         />
                         <div style={styles.divBtText}>Tutorial de uso</div>
                     </div>

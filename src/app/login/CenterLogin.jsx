@@ -51,11 +51,18 @@ export default function CenterLogin(){
                 console.log(response)
                 const data = await response.json()
                 console.log(data)
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('localId', data.localId);
-                localStorage.setItem('matricula', data.matricula);
-                // localStorage.setItem('mesa', '01')
-                localStorage.setItem('mesa', mesa)
+                const objSession = {
+                    access_token: data.access_token, 
+                    localId: data.localId, 
+                    matricula: data.matricula,
+                    mesa: mesa
+                }
+                sessionStorage.setItem('objSession', JSON.stringify(objSession));
+                // sessionStorage.setItem('access_token', data.access_token);
+                // sessionStorage.setItem('localId', data.localId);
+                // sessionStorage.setItem('matricula', data.matricula);
+                // // localStorage.setItem('mesa', '01')
+                // sessionStorage.setItem('mesa', mesa)
                 window.location.href="/";
                 setData(data);
             }catch(error){

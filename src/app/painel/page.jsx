@@ -7,14 +7,14 @@ import CenterPainel from "./CenterPainel"
 import { useEffect } from "react";
 export default function Painel(){
     useEffect(()=>{
-        if(!localStorage.getItem('access_token')){
+        if(sessionStorage.getItem('objSession')==undefined || sessionStorage.getItem('objSession')==null){
           window.location.href = '/login'
         }
       }, [])
     return (
         <div className={styles.main}>
             <Top />
-            <DivCenter content={<CenterPainel />} />
+            <DivCenter content={<CenterPainel objSession={sessionStorage.getItem('objSession')} />} />
             <Footer />
         </div>
     )
